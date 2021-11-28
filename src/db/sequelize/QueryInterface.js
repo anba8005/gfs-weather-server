@@ -20,11 +20,11 @@ export default class SequelizeQueryInterface extends QueryInterface {
       where: { forecastedDate: values.forecastedDate },
       defaults: values
     })
-      .spread(function (dataSet, created) {
+      .then(function ([dataSet, created]) {
         if (created) {
           return dataSet
         } else {
-          return dataSet.updateAttributes(values)
+          return dataSet.update(values)
         }
       })
   }
@@ -40,11 +40,11 @@ export default class SequelizeQueryInterface extends QueryInterface {
       where: values,
       defaults: values
     })
-      .spread((layer, created) => {
+      .then(([layer, created]) => {
         if (created) {
           return layer
         } else {
-          return layer.updateAttributes(values).then((layer) => {
+          return layer.update(values).then((layer) => {
             return this.db.Point.destroy({
               where: { layer_id: layer.id }
             })

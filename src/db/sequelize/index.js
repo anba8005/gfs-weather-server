@@ -1,4 +1,4 @@
-import Sequelize from 'sequelize'
+import Sequelize, { DataTypes } from 'sequelize'
 import Config from '../../Config'
 import QueryInterface from './QueryInterface'
 
@@ -16,7 +16,7 @@ export function bootstrap () {
   'DataSet Layer Point'
     .split(' ')
     .forEach((file) => {
-      const model = db.sequelize.import('./' + file)
+      const model = require('./' + file).default(db.sequelize, DataTypes)
       db[model.name] = model
     })
 
@@ -24,6 +24,8 @@ export function bootstrap () {
   db.Layer.hasMany(db.Point, { as: 'points' })
 
   db.query = new QueryInterface(db)
+
+  db.sequelize.sync({ force: false })
 
   return db
 }

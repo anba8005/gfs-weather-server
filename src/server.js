@@ -21,7 +21,7 @@ bootstrap()
 const server = restify.createServer({
   name: 'WG'
 })
-server.use(restify.queryParser())
+server.use(restify.plugins.queryParser())
 
 // Register plugins
 plugins.forEach((plugin) => plugin(server))
